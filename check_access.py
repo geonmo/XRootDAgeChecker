@@ -1,4 +1,4 @@
-import os, time
+import os, time,sys
 import multiprocessing
 
 
@@ -14,10 +14,12 @@ def get_accesstime(dirname, files,result ) :
 
 
 if __name__ == '__main__':
-    rootdir = os.getcwd()
     result = {}
     procs= []
-    ncpus = int(multiprocessing.cpu_count()*0.75)   ## only 75% cores will be used.
+    if ( len(sys.argv) != 2 or not os.path.isdir( sys.argv[1]) ) : sys.exit(-1)
+    rootdir = sys.argv[1]
+
+    #ncpus = int(multiprocessing.cpu_count()*0.75)   ## only 75% cores will be used.
 
     manager = multiprocessing.Manager()
     result = manager.dict()
