@@ -1,4 +1,5 @@
-import os, time,sys
+#!/usr/bin/env python
+import os, time,sys, os.path
 import multiprocessing
 
 
@@ -6,10 +7,13 @@ def get_accesstime(dirname, files,result ) :
     value = 0 
     for infile in files :
         file_full_path = os.path.join(dirname,infile)
-        new_value =  os.path.getatime(file_full_path) 
+        if (not os.path.islink(file_full_path)) :
+            new_value =  os.path.getatime(file_full_path) 
+        else:
+            new_value = os.path.getatime( os.readlink(file_full_path))
         if new_value > value : value = new_value
     result[dirname] = time.strftime("%Y%m%d",time.localtime(value))
-    
+    #print(result) 
 
 
 
@@ -37,4 +41,4 @@ if __name__ == '__main__':
     for keys in result.keys() :
         if ( result[keys] == "19700101" ) : 
             continue
-        print (keys,result[keys])
+        print keys,result[keys]
